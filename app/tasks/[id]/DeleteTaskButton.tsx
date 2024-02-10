@@ -17,6 +17,14 @@ const DeleteTaskButton = ({ taskId } : { taskId: number}) => {
     <AlertDialog.Description>
       Are you sure you want to delete? This action cannot be undone.
     </AlertDialog.Description>
+    <Flex mt="4" gap="3">
+      <AlertDialog.Cancel>
+        <Button variant="soft" color="gray">Cancel</Button>    
+      </AlertDialog.Cancel>
+      <AlertDialog.Action>
+        <Button color= "red">Delete Task</Button>
+      </AlertDialog.Action>
+    </Flex>
   </AlertDialog.Content>
   </AlertDialog.Root>
   );
