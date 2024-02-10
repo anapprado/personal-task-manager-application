@@ -13,7 +13,7 @@ const TaskDetails = ({ task }: { task: Task }) => {
           <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text> {       }
           <Text>Due date: {task.dueDate.toDateString()}</Text>
       </Flex>
-      <Card className='prose' mt='4'>
+      <Card className='prose max-w-full' mt='4'>
           <ReactMarkdown>{task.description}</ReactMarkdown>
       </Card>
     </>

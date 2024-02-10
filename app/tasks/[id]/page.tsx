@@ -1,8 +1,9 @@
 import prisma from '@/prisma/client';
-import { Box, Grid } from '@radix-ui/themes';
+import { Box, Flex, Grid } from '@radix-ui/themes';
 import { notFound } from 'next/navigation';
 import EditTaskButton from './EditTaskButton';
 import TaskDetails from './TaskDetails';
+import DeleteTaskButton from './DeleteTaskButton';
 
 interface Props {
     params: { id: string }
@@ -19,12 +20,16 @@ const task = await prisma.task.findUnique({
   notFound();
     
   return (
-    <Grid columns={{initial: "1", md: "2"}} gap="5">
-      <Box>
+    <Grid columns={{initial: "1", sm: "5"}} gap="5">
+      <Box className="md:co-span-4">
         <TaskDetails task={task} />
       </Box>
       <Box>
-        <EditTaskButton taskId={task.id} />
+        <Flex direction="column" gap="4">
+          <EditTaskButton taskId={task.id} />
+          <DeleteTaskButton taskId={task.id} />
+        </Flex>
+
       </Box>
     </Grid>
   )
