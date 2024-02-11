@@ -20,7 +20,7 @@ const task = await prisma.task.findUnique({
   notFound();
     
   return (
-    <Grid columns={{initial: "1", sm: "5"}} gap="5">
+    <Grid columns={{initial: "1", sm: "3"}} gap="5">
       <Box className="md:co-span-4">
         <TaskDetails task={task} />
       </Box>
