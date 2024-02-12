@@ -15,7 +15,7 @@ const DeleteTaskButton = ({ taskId }: { taskId : number }) => {
     try {
       setDeleting(true);
       await axios.delete('/api/tasks/' + taskId);
-      router.push('/tasks/list');
+      router.push('/tasks');
       router.refresh();
     } catch (error) {
       setDeleting(false);

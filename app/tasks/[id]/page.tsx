@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import EditTaskButton from './EditTaskButton';
 import TaskDetails from './TaskDetails';
 import DeleteTaskButton from './DeleteTaskButton';
+import AssigneeSelect from './AssigneeSelect';
+
 
 interface Props {
     params: { id: string }

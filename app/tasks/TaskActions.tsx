@@ -1,14 +1,17 @@
-import { Button } from '@radix-ui/themes'
-import Link from 'next/link'
-import React from 'react'
+import { Button, Flex } from '@radix-ui/themes';
+import Link from 'next/link';
+import React from 'react';
+import TaskStatusFilter from './TaskStatusFilter';
 
 const TaskActions = () => {
   return (
-    <div className='mb-5'>
-        <Button>
-          <Link href='tasks/new'> New Task</Link></Button>
-    </div>
-  )
-}
+    <Flex justify="between">
+      <TaskStatusFilter />
+      <Button>
+        <Link href="/tasks/new">New Task</Link>
+      </Button>
+    </Flex>
+  );
+};
 
-export default TaskActions
+export default TaskActions;

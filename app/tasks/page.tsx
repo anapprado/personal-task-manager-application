@@ -1,46 +1,57 @@
 import prisma from '@/prisma/client';
-import { Table } from '@radix-ui/themes';
-import {TaskStatusBadge, Link} from '@/app/components';
+import { Status } from '@prisma/client';
 import TaskActions from './TaskActions';
+import { Flex } from '@radix-ui/themes';
+import { Metadata } from 'next';
+import TaskTable, { TaskQuery, columnNames } from './TaskTable';
+import Pagination from '@/app/components/Pagination';
 
-const TasksPage = async () => {
-  const tasks = await prisma.task.findMany();
+interface Props {
+  searchParams: TaskQuery
+}
+
+const TasksPage = async ({ searchParams }: Props) => {
+  const statuses = Object.values(Status);
+  const status = statuses.includes(searchParams.status)
+    ? searchParams.status
+    : undefined;
+  const where = { status };
+
+  const orderBy = columnNames
+    .includes(searchParams.orderBy)
+    ? { [searchParams.orderBy]: 'asc' }
+    : undefined;
+
+  const page = parseInt(searchParams.page) || 1;
+  const pageSize = 10;
+
+  const tasks = await prisma.task.findMany({
+    where,
+    orderBy,
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+  });
+
+  const taskCount = await prisma.task.count({ where });
+
   return (
-    <div>
+    <Flex direction="column" gap="3">
       <TaskActions />
-      <Table.Root variant='surface'>
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeaderCell>Task</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className='hidden md:table-cell'>Status</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className='hidden md:table-cell'>Created</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className='hidden md:table-cell'>Due Date</Table.ColumnHeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {tasks.map(task => (
-            <Table.Row key={task.id}>
-              <Table.Cell>
-                <Link href={`/tasks/${task.id}`}>
-                  {task.title}
-                </Link>
-                <div className='block md:hidden'>
-                  <TaskStatusBadge status={task.status}/>
-                </div>
-              </Table.Cell>
-              <Table.Cell className='hidden md:table-cell'>
-                <TaskStatusBadge status={task.status}/>
-              </Table.Cell>
-              <Table.Cell className='hidden md:table-cell'>{task.createdAt.toDateString()}</Table.Cell>
-              <Table.Cell className='hidden md:table-cell'>{task.dueDate.toDateString()}</Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table.Root>
-    </div>
+      <TaskTable searchParams={searchParams} tasks={tasks} />
+      <Pagination
+        pageSize={pageSize}
+        currentPage={page}
+        itemCount={taskCount}
+      />
+    </Flex>
   );
 };
-    
+
 export const dynamic = 'force-dynamic';
 
-export default TasksPage
+export const metadata: Metadata = {
+  title: 'Task Tracker - Task List',
+  description: 'View all tasks'
+};
+
+export default TasksPage;

@@ -22,18 +22,23 @@ type taskFormData = z.infer<typeof taskSchema>;
 const TaskForm = ({ task }: { task?: Task }) => {
 
   const router = useRouter();
-  const {register, control, handleSubmit, formState: { errors }} = useForm<taskFormData>({
+  const {
+    register, 
+    control, 
+    handleSubmit, 
+    formState: { errors }
+  } = useForm<taskFormData>({
     resolver: zodResolver(taskSchema)
   });
   const [error, setError] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       setSubmitting(true);
       if (task)
         await axios.patch('/api/tasks/' + task.id, data);
-      else
-        await axios.post('/api/tasks', data);
+      else await axios.post('/api/tasks', data);
       router.push('/tasks');
       router.refresh();
     } catch (error) {
@@ -45,21 +50,30 @@ const TaskForm = ({ task }: { task?: Task }) => {
   
   return (
     <div className='max-w-xl'>
-      {error && <Callout.Root color='red' className='mb-5'>
+      {error && (
+      <Callout.Root color='red' className='mb-5'>
         <Callout.Text>{error}</Callout.Text>
-      </Callout.Root>}
+      </Callout.Root>
+    )}
       <form 
         className='space-y-3' 
         onSubmit={onSubmit}>
           <TextField.Root>
-              <TextField.Input defaultValue={task?.title} placeholder='Title' {...register('title')} />
+              <TextField.Input 
+              defaultValue={task?.title} 
+              placeholder='Title' 
+              {...register('title')} 
+              />
           </TextField.Root>
           <ErrorMessage>{errors.title?.message}</ErrorMessage>
           <Controller
             name="description"
             control={control}
             defaultValue={task?.description} 
-            render={({field}) => <SimpleMDE placeholder='Description' {...field} />}
+            render={({field}) => (
+            
+            <SimpleMDE placeholder='Description' {...field} />
+            )}
           />
           <ErrorMessage>{errors.description?.message}</ErrorMessage>
           <Controller

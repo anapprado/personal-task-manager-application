@@ -7,7 +7,7 @@ const TaskDetails = ({ task }: { task: Task }) => {
   return (
     <>
       <Heading>{task.title}</Heading>
-      <Flex className="space-x-12" my="3">
+      <Flex className="space-x-3" my="2">
           <TaskStatusBadge status={task.status} />
           <Text>Created on: {task.createdAt.toDateString()}</Text>
           <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text> {       }
